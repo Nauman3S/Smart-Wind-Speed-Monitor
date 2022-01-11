@@ -6,6 +6,7 @@ GPIO.setmode(GPIO.BCM) # Use physical pin number
 from buzzerHandler import *
 from bmeHandler import *
 from ledHandler import *
+from windSpeedHandler import *
 
 
 StatusLED=LED(12,GPIO,GPIO.LOW)
@@ -20,3 +21,5 @@ while True:
     StatusLED.OFF()
     buzzer.off()
     sleep(1)
+    buzzer.beep()
+    
