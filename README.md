@@ -55,6 +55,35 @@ Things you need to install the FW.
 ### Installing <a name = "installing"></a>
 
 A step by step series that tell you how to get the Firmware and Backend running
+### Raspberry Pi Firmware Pre-Reqs
+
+1.  Download and install the latest Raspberry Pi OS Desktop image to your SD card
+2.  Open the terminal and execute the following command
+    ```sudo raspi-config```
+3. Then follow the following pictures to enable I2C bus on you raspberry pi
+
+* ![R1](artwork/r1.png)
+* ![R2](artwork/r2.png)
+* ![R3](artwork/r3.png)
+* ![R4](artwork/r4.png)
+* ![R5](artwork/r5.png)
+
+* Then do the same for Serial(UART) and SPI
+
+* ![R2](artwork/serial.png)
+* ![R2](artwork/spi.png)
+### Configuring Raspberry Pi
+
+ 1.  Copy Firmware folder to the desktop of your Raspberry Pi, open the terminal of your Raspberry Pi and execute the following commands
+  - ```sudo apt-get update```
+  - ```sudo apt-get upgrade```
+  - ```cd ~/Desktop/Firmware/```
+  - ```sudo chmod a+rx starter.sh```
+  - ```sudo apt install python3-pip```
+  - ```sudo pip3 install --upgrade setuptools```
+  - ```pip3 install paho-mqtt```
+  - ```sudo pip3 install RPi.bme280```
+  - ```pip3 install smbus-cffi==0.5.1```
 
 #### Raspberry Pi Configuration
 
