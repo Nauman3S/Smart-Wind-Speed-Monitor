@@ -1,18 +1,15 @@
-import bme280
-import smbus2
-from time import sleep
+import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
+from time import sleep, time # Import the sleep function from the time module
+GPIO.setwarnings(False) # Ignore warning for now
+GPIO.setmode(GPIO.BCM) # Use physical pin number
+from bmeHandler import *
+from ledHandler import *
 
-port = 1
-address = 0x76 # Adafruit BME280 address. Other BME280s may be different
-bus = smbus2.SMBus(port)
-
-bme280.load_calibration_params(bus,address)
+StatusLED=LED(12,GPIO,GPIO.LOW)
 
 while True:
-    bme280_data = bme280.sample(bus,address)
-    print("Humidity ; Pressure ; Temperature")
-    humidity  = bme280_data.humidity
-    pressure  = bme280_data.pressure
-    ambient_temperature = bme280_data.temperature
-    print(humidity, pressure, ambient_temperature)
+    print(getBME280Data())
+    StatusLED.ON()
+    sleep(1)
+    StatusLED.OFF()
     sleep(1)
