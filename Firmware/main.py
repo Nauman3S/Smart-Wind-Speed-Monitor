@@ -2,8 +2,8 @@ import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 from time import sleep, time # Import the sleep function from the time module
 GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BCM) # Use physical pin number
-from gpiozero import Buzzer
 
+from buzzerHandler import *
 from bmeHandler import *
 from ledHandler import *
 
