@@ -85,9 +85,11 @@ A step by step series that tell you how to get the Firmware and Backend running
   - ```sudo pip3 install RPi.bme280```
   - ```pip3 install smbus-cffi==0.5.1```
 
-#### Raspberry Pi Configuration
+#### Running the Firmware
 
-``((TO BE UPDATED IN THE UPCOMMING MILESTONES))``
+-   Execute the following command to run the firmware
+
+``./home/pi/Firmware/starter.sh``
 
 ## Circuit <a name = "circuit"></a>
 
@@ -193,7 +195,9 @@ Following components are used to make this project
 9.  3v-6v LED
     ○ https://www.amazon.co.uk/Sourcingmap-20pcs-Wired-Light-Flashing/dp/B07DYZ1L3Y/ref=sr_1_12?keywords=led+light+5mm&qid=1639823838&sr=8-12
 
+## 📽️Demo Videos <a name="demovideo"></a>
 
+-   [Firmware Demo Video](https://youtu.be/ptCAPFGeyw8) - Smart Wind Speed Monitor Firmware Demo Video
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 
