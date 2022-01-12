@@ -19,7 +19,7 @@ SECS_IN_AN_HOUR=3600
 def spin():
     global wind_count
     wind_count=wind_count+1
-    print('spin')
+    # print('spin')
 
 wind_speed_sensor.when_pressed = spin
 
@@ -43,7 +43,7 @@ def loopWindSpeedSensor(config):
     while 1:
         wind_count=0
         sleep(wind_interval)
-        print(calculate_speed(wind_interval),'km/h')
+        print(calculate_speed(wind_interval),'km/h  WindSpeed')
 
 x = threading.Thread(target=loopWindSpeedSensor, args=(1,))
 x.start()

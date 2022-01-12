@@ -14,6 +14,7 @@ buzzer = Buzzer(27)
 
 
 while True:
+    print('Humidity , Pressure , Temperature')
     print(getBME280Data())
     StatusLED.ON()
     buzzer.on()
