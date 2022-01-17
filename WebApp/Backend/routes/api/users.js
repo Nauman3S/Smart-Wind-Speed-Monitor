@@ -106,11 +106,11 @@ router.put("/update/:id", async (req, res) => {
     await user.save();
     let maxValue = new maxValueModel({
       macAddress: req.body.macAddress,
-      maxTemperature: "",
-      maxPressure: "",
-      maxHumidity: "",
-      maxWindSpeed: "",
-      maxBatteryLevel: "",
+      maxTemperature: "0",
+      maxPressure: "0",
+      maxHumidity: "0",
+      maxWindSpeed: "0",
+      maxBatteryLevel: "0",
     });
 
     await maxValue.save();
