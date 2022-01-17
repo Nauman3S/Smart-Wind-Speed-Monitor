@@ -225,7 +225,11 @@ Following components are used to make this project
 
 ## 📽️Demo Videos <a name="demovideo"></a>
 
+
+-   [Complete Demo Video](https://youtu.be/FKrnvWw6dvk) - Smart Wind Speed Monitor Complete Demo Video
+
 -   [Firmware Demo Video](https://youtu.be/ptCAPFGeyw8) - Smart Wind Speed Monitor Firmware Demo Video
+
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 
