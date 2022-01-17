@@ -82,6 +82,7 @@ A step by step series that tell you how to get the Firmware and Backend running
   - ```sudo apt install python3-pip```
   - ```sudo pip3 install --upgrade setuptools```
   - ```pip3 install paho-mqtt```
+  - ```pip3 pip3 install get-mac```
   - ```sudo pip3 install RPi.bme280```
   - ```pip3 install smbus-cffi==0.5.1```
 
@@ -166,12 +167,39 @@ Components pin connection details
 
 ## WebApp <a name = "webapp"></a>
 
-``((TO BE UPDATED IN THE UPCOMMING MILESTONES))``
+-   Web App is deployed and accessible from the link below
+    -   https://windspeedmonitor-frontend.production.rehanshakir.com/
+    -   Email Address: admin@smartsm.com
+    -   Password: admin
 
+### Backend
+
+-   Data from ESP32 to Dashboard is published on the topic `wsmdata/macAddress` where macAddress is the MAC Address of the Raspberry Pi.
+-   Alarm/warning data is published from the dashboard to the Raspberry Pi on topic `macAddress/wsm`
 ## Usage <a name = "usage"></a>
 
-``((TO BE UPDATED IN THE UPCOMMING MILESTONES))``
+1.  Power on your Device and get its MAC Address.
+2.  Log-in to the dashboard or create a new account
 
+
+| Log-In | Sign-up |
+| :--------- | :---- |
+| ![d1](artwork/scr_d1.png)    | ![d1](artwork/scr_d2.png) |
+
+3.  Add a new device with its MAC Address
+
+![d1](artwork/scr_d5.png)
+
+4.  Set it's alarm values for turning the buzzer on/off
+![d1](artwork/scr_d4.png)
+
+5. Now you can see the real-time data of the device with the alarm values
+
+![d1](artwork/scr_d3.png)
+
+6.  You can also delete the device or change the user settings from the settings page
+
+![d1](artwork/scr_d6.png)
 ## List of Components <a name = "list"></a>
 
 Following components are used to make this project

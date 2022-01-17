@@ -14,7 +14,10 @@ wind_count = 17
 CM_IN_KM=100000.0
 SECS_IN_AN_HOUR=3600
 
-
+wskmph=0
+def getWindSpeed():
+    global wskmph
+    return wskmph
 
 def spin():
     global wind_count
@@ -39,11 +42,12 @@ def calculate_speed(time_sec):
 
 
 def loopWindSpeedSensor(config):
-    global wind_count,wind_interval
+    global wind_count,wind_interval,wskmph
     while 1:
         wind_count=0
         sleep(wind_interval)
-        print(calculate_speed(wind_interval),'km/h  WindSpeed')
+        wskmph=calculate_speed(wind_interval)
+        print(wskmph,'km/h  WindSpeed')
 
 x = threading.Thread(target=loopWindSpeedSensor, args=(1,))
 x.start()
