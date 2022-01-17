@@ -60,35 +60,44 @@ const Data = () => {
       }
     }, [delay]);
   };
-  const smartWSMDeviceData = () => {
+  const smartWSMDeviceData = async () => {
     if (localStorage.getItem("user-info")) {
       history.push("/data");
     } else {
       history.push("/sign-in");
     }
     // console.log("Calling");
-    smartWSM
+    await smartWSM
       .post("/api/mqtt/getOne", {
         macAddress: localStorage.getItem("macAddress"),
       })
       .then((res) => {
         // if (res.data[0].LampMaintenance === "") {
         // } else {
+        console.log(res.data);
         setData(res.data);
         // }
       })
       .catch((err) => {
         console.log(err);
       });
-    // smartWSM
-    //   .get("/api/check")
-    //   .then((res) => {
-    //     // console.log(res.data[0]);
-    //     setCheckedList(res.data[0]);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+
+    await smartWSM
+      .post("/api/maxValue/getValues", {
+        macAddress: localStorage.getItem("macAddress"),
+      })
+      .then((res) => {
+        console.log("inres");
+        console.log(res.data);
+        localStorage.setItem("maxTemperature", res.data.maxTemperature);
+        localStorage.setItem("maxHumidity", res.data.maxHumidity);
+        localStorage.setItem("maxPressure", res.data.maxPressure);
+        localStorage.setItem("maxWindSpeed", res.data.maxWindSpeed);
+        localStorage.setItem("maxBatteryLevel", res.data.maxBatteryLevel);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   useEffect(() => {
     // console.log("In USE");
@@ -152,9 +161,9 @@ const Data = () => {
         console.log(record.temperature);
         if (
           Number(record.temperature) >
-          Number(localStorage.getItem("maxTemperature"))
+            Number(localStorage.getItem("maxTemperature")) &&
+          Number(localStorage.getItem("maxTemperature")) !== 0
         ) {
-          console.log("In publishToMqtt");
           publishToMqtt(record.temperature);
         }
 
@@ -163,7 +172,8 @@ const Data = () => {
             style: {
               background:
                 Number(record.temperature) >
-                Number(localStorage.getItem("maxTemperature"))
+                  Number(localStorage.getItem("maxTemperature")) &&
+                Number(localStorage.getItem("maxTemperature")) !== 0
                   ? "red"
                   : "",
             },
@@ -180,9 +190,10 @@ const Data = () => {
       // dataIndex: "pressure",
       render: (record) => {
         if (
-          Number(record.pressure) > Number(localStorage.getItem("maxPressure"))
+          Number(record.pressure) >
+            Number(localStorage.getItem("maxPressure")) &&
+          Number(localStorage.getItem("maxPressure")) !== 0
         ) {
-          console.log("In publishToMqtt");
           publishToMqtt(record.pressure);
         }
 
@@ -191,7 +202,8 @@ const Data = () => {
             style: {
               background:
                 Number(record.pressure) >
-                Number(localStorage.getItem("maxPressure"))
+                  Number(localStorage.getItem("maxPressure")) &&
+                Number(localStorage.getItem("maxPressure")) !== 0
                   ? "red"
                   : "",
             },
@@ -208,9 +220,10 @@ const Data = () => {
       // dataIndex: "humidity",
       render: (record) => {
         if (
-          Number(record.humidity) > Number(localStorage.getItem("maxHumidity"))
+          Number(record.humidity) >
+            Number(localStorage.getItem("maxHumidity")) &&
+          Number(localStorage.getItem("maxHumidity")) !== 0
         ) {
-          console.log("In publishToMqtt");
           publishToMqtt(record.humidity);
         }
 
@@ -219,7 +232,8 @@ const Data = () => {
             style: {
               background:
                 Number(record.humidity) >
-                Number(localStorage.getItem("maxHumidity"))
+                  Number(localStorage.getItem("maxHumidity")) &&
+                Number(localStorage.getItem("maxHumidity")) !== 0
                   ? "red"
                   : "",
             },
@@ -237,9 +251,9 @@ const Data = () => {
       render: (record) => {
         if (
           Number(record.windSpeed) >
-          Number(localStorage.getItem("maxWindSpeed"))
+            Number(localStorage.getItem("maxWindSpeed")) &&
+          Number(localStorage.getItem("maxWindSpeed")) !== 0
         ) {
-          console.log("In publishToMqtt");
           publishToMqtt(record.windSpeed);
         }
 
@@ -248,7 +262,8 @@ const Data = () => {
             style: {
               background:
                 Number(record.windSpeed) >
-                Number(localStorage.getItem("maxWindSpeed"))
+                  Number(localStorage.getItem("maxWindSpeed")) &&
+                Number(localStorage.getItem("maxWindSpeed")) !== 0
                   ? "red"
                   : "",
             },
@@ -266,9 +281,9 @@ const Data = () => {
       render: (record) => {
         if (
           Number(record.batteryLevel) >
-          Number(localStorage.getItem("maxBatteryLevel"))
+            Number(localStorage.getItem("maxBatteryLevel")) &&
+          Number(localStorage.getItem("maxBatteryLevel")) !== 0
         ) {
-          console.log("In publishToMqtt");
           publishToMqtt(record.batteryLevel);
         }
 
@@ -277,7 +292,8 @@ const Data = () => {
             style: {
               background:
                 Number(record.batteryLevel) >
-                Number(localStorage.getItem("maxBatteryLevel"))
+                  Number(localStorage.getItem("maxBatteryLevel")) &&
+                Number(localStorage.getItem("maxBatteryLevel")) !== 0
                   ? "red"
                   : "",
             },
@@ -612,7 +628,7 @@ const Data = () => {
           <Modal
             title="Add a New Device"
             visible={isModalVisible}
-            // onOk={handleOk}
+            onOk={handleOk}
             onCancel={handleCancel}
             destroyOnClose={true}
             footer={null}
