@@ -178,7 +178,7 @@ Components pin connection details
 -   Alarm/warning data is published from the dashboard to the Raspberry Pi on topic `macAddress/wsm`
 ## Usage <a name = "usage"></a>
 
-1.  Power on your Device and get its MAC Address.
+1.  Power on your Device and get its MAC Address. You can get the MAC Address as soon as you run the [firmware](https://github.com/Nauman3S/Smart-Wind-Speed-Monitor#running-the-firmware)
 2.  Log-in to the dashboard or create a new account
 
 
