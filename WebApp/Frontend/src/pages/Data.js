@@ -30,12 +30,10 @@ const Data = () => {
   //   history.push("/sign-in");
   // }
   const componentMounted = useRef(true);
-
+  const [map, setMap] = useState(false);
   const [data, setData] = useState([]);
   const [macAddress, setMacAddress] = useState("");
   const [userMacAddress, setUserMacAddress] = useState([]);
-  const [longitude, setLongitude] = useState("");
-  const [latitude, setLatitude] = useState("");
 
   // let intervalId = null;
 
@@ -69,16 +67,11 @@ const Data = () => {
       macAddress: localStorage.getItem("macAddress"),
     });
 
-    console.log(fetch.data[0].longitude);
-    setData(fetch.data);
-
-    fetch.data[0].longitude
-      ? setLongitude(fetch.data[0].longitude)
-      : setLongitude("0");
-    fetch.data[0].latitude
-      ? setLatitude(fetch.data[0].latitude)
-      : setLatitude("0");
-
+    console.log(fetch);
+    if (fetch.status === 200) {
+      setData(fetch.data);
+      setMap(true);
+    }
     await smartWSM
       .post("/api/maxValue/getValues", {
         macAddress: localStorage.getItem("macAddress"),
@@ -100,6 +93,7 @@ const Data = () => {
     // console.log("In USE");
 
     smartWSMDeviceData();
+    setMap(false);
     return () => {
       componentMounted.current = false;
     };
@@ -429,12 +423,7 @@ const Data = () => {
 
     setMacAddress(value);
   }
-  const locationData = {
-    startLong: 74,
-    startLat: 31,
-    endLong: 74.8,
-    endLat: 31.8,
-  };
+
   const getMacAddresses = async () => {
     const id = getIdofLoggedInUser();
 
@@ -642,11 +631,7 @@ const Data = () => {
           </Row>
         </div>
 
-        {longitude && latitude ? (
-          <AwsMap longitude={longitude} latitude={latitude} />
-        ) : (
-          ""
-        )}
+        {data.length > 0 && map ? <AwsMap data={data[0]} /> : ""}
       </>
     );
   } else if (localStorage.getItem("userType") === "admin") {

@@ -3074,3 +3074,9 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   border-radius: 50%;
   cursor: pointer;
 }
+#map {
+  /* The id of the container you passed to createMap */
+  height: 40vh;
+  width: 40vw;
+  margin: auto;
+}
