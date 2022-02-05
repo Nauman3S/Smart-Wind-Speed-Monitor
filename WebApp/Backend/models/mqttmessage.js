@@ -20,6 +20,12 @@ let mqttMessageSchema = mongoose.Schema(
     batteryLevel: {
       type: String,
     },
+    longitude: {
+      type: String,
+    },
+    latitude: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

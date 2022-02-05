@@ -16,6 +16,8 @@ import {
   message,
   Select,
 } from "antd";
+import Mapbox from "./Mapbox";
+import AwsMap from "./AwsMap";
 
 import { RedoOutlined } from "@ant-design/icons";
 
@@ -32,14 +34,10 @@ const Data = () => {
   const [data, setData] = useState([]);
   const [macAddress, setMacAddress] = useState("");
   const [userMacAddress, setUserMacAddress] = useState([]);
-  // const [userType, setUserType] = useState("");
-  // const [checkedList, setCheckedList] = useState({});
+  const [longitude, setLongitude] = useState("");
+  const [latitude, setLatitude] = useState("");
 
   // let intervalId = null;
-  const myRef = useRef(null);
-
-  const executeScroll = () => myRef.current.scrollIntoView();
-  // const executeScroll1 = () => myRef1.current.scrollIntoView();
 
   const useInterval = (callback, delay) => {
     const savedCallback = useRef();
@@ -67,20 +65,19 @@ const Data = () => {
       history.push("/sign-in");
     }
     // console.log("Calling");
-    await smartWSM
-      .post("/api/mqtt/getOne", {
-        macAddress: localStorage.getItem("macAddress"),
-      })
-      .then((res) => {
-        // if (res.data[0].LampMaintenance === "") {
-        // } else {
-        console.log(res.data);
-        setData(res.data);
-        // }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetch = await smartWSM.post("/api/mqtt/getOne", {
+      macAddress: localStorage.getItem("macAddress"),
+    });
+
+    console.log(fetch.data[0].longitude);
+    setData(fetch.data);
+
+    fetch.data[0].longitude
+      ? setLongitude(fetch.data[0].longitude)
+      : setLongitude("0");
+    fetch.data[0].latitude
+      ? setLatitude(fetch.data[0].latitude)
+      : setLatitude("0");
 
     await smartWSM
       .post("/api/maxValue/getValues", {
@@ -123,27 +120,12 @@ const Data = () => {
       .post(`/api/mqtt/publish/${macaddress}`, {
         message: msg,
       })
-      .then((res) => {
-        // console.log(res);
-        // message.success("Message Published");
-        // setTimeout(() => {
-        //   smartWSMDeviceData();
-        // }, 10000);
-      })
+      .then((res) => {})
       .catch((err) => {
         // console.log("In err");
         console.log(err);
       });
   };
-
-  // const setVisible = (visible) => {
-  //   // console.log(checkedList[`${visible}`]);
-  //   if (checkedList[`${visible}`] === true) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
 
   const columns = [
     {
@@ -303,6 +285,16 @@ const Data = () => {
         };
       },
     },
+    {
+      title: "Longitude",
+      dataIndex: "longitude",
+      key: "longitude",
+    },
+    {
+      title: "Latitude",
+      dataIndex: "latitude",
+      key: "latitude",
+    },
   ];
   //Modal Functions
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -341,7 +333,6 @@ const Data = () => {
 
     const token = localStorage.getItem("user-info");
     const user = parseJwt(token);
-    // console.log(user.id);
 
     return user.id;
   };
@@ -399,7 +390,6 @@ const Data = () => {
   const onFinish = async (values) => {
     const id = getIdofLoggedInUser();
     const hide = message.loading("Processing", 0);
-    // console.log(id);
     await smartWSM
       .put(`/api/users/update/${id}`, {
         macAddress: values.macAddress,
@@ -420,10 +410,6 @@ const Data = () => {
         message.success("Device Added");
       })
       .catch((err) => {
-        // console.log("ER");
-        // message.
-        // setIsModalVisible(false);
-
         setTimeout(hide, 0);
 
         message.warn("Device Already Exists");
@@ -442,9 +428,13 @@ const Data = () => {
     localStorage.setItem("macAddress", value);
 
     setMacAddress(value);
-    // console.log(`selected ${localStorage.getItem("macAddress", value)}`);
   }
-
+  const locationData = {
+    startLong: 74,
+    startLat: 31,
+    endLong: 74.8,
+    endLat: 31.8,
+  };
   const getMacAddresses = async () => {
     const id = getIdofLoggedInUser();
 
@@ -507,17 +497,7 @@ const Data = () => {
           >
             Refresh
           </Button>
-          {/* <Button
-            type="primary"
-            className="addDevicebtn"
-            onClick={executeScroll}
-            style={{
-              marginLeft: "5px",
-              borderRadius: "50px",
-            }}
-          >
-            Buttons
-          </Button> */}
+
           <Modal
             title="Add a New Device"
             visible={isModalVisibleSetValues}
@@ -536,12 +516,6 @@ const Data = () => {
                 className="username"
                 label="Temperature"
                 name="temperature"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Enter Temperature Max Value",
-                //   },
-                // ]}
               >
                 <Input
                   placeholder="Enter Temperature Max Value"
@@ -549,33 +523,13 @@ const Data = () => {
                 />
               </Form.Item>
 
-              <Form.Item
-                className="username"
-                label="Pressure"
-                name="pressure"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Enter Pressure Max Value",
-                //   },
-                // ]}
-              >
+              <Form.Item className="username" label="Pressure" name="pressure">
                 <Input
                   placeholder="Enter Pressure Max Value"
                   style={{ paddingTop: 23.5, paddingBottom: 23.5 }}
                 />
               </Form.Item>
-              <Form.Item
-                className="username"
-                label="Humidity"
-                name="humidity"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Enter Humidity Max Value",
-                //   },
-                // ]}
-              >
+              <Form.Item className="username" label="Humidity" name="humidity">
                 <Input
                   placeholder="Enter Humidity Max Value"
                   style={{ paddingTop: 23.5, paddingBottom: 23.5 }}
@@ -585,12 +539,6 @@ const Data = () => {
                 className="username"
                 label="Wind Speed"
                 name="windSpeed"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Enter Wind Speed Max Value",
-                //   },
-                // ]}
               >
                 <Input
                   placeholder="Enter Wind Speed Max Value"
@@ -601,12 +549,6 @@ const Data = () => {
                 className="username"
                 label="Battery Level"
                 name="batteryLevel"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please Enter Battery Level Max Value",
-                //   },
-                // ]}
               >
                 <Input
                   placeholder="Enter Battery Level Max Value"
@@ -699,149 +641,12 @@ const Data = () => {
             </Col>
           </Row>
         </div>
-        {/* <div ref={myRef}>
-            <Card
-              bordered={false}
-              className="criclebox tablespace mb-24"
-              title="Smart Hvac Buttons"
-              style={{ marginTop: 20, paddingBottom: 20 }}
-            >
-              <Button
-                type="danger"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("HeatStage1")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Heat Stage 1
-              </Button>
-              <Button
-                type="danger"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("HeatStage2")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Heat Stage 2
-              </Button>
-              <Button
-                type="danger"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("HeatStage3")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Heat Stage 3
-              </Button>
-              <Button
-                type="danger"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("HeatOFF")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Heat OFF
-              </Button>
-              <Button
-                type="danger"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("RVOnInHEAT")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                RV ON IN HEAT
-              </Button>
-              <Button
-                type="primary"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("RVOFF")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                RV OFF
-              </Button>
-              <Button
-                type="primary"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("CoolOFF")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Cool OFF
-              </Button>
-              <Button
-                type="primary"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("CoolStage1")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Cool Stage 1
-              </Button>
-              <Button
-                type="primary"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("CoolStage2")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                Cool Stage 2
-              </Button>
 
-              <Button
-                type="primary"
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("RVOnInCOOL")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                }}
-              >
-                RV ON IN COOL
-              </Button>
-
-              <Button
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("IndoorFanON")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                  background: "#00FF7F",
-                }}
-              >
-                Indoor Fan ON
-              </Button>
-              <Button
-                className="addDevicebtn"
-                onClick={() => publishToMqtt("IndoorFanOFF")}
-                style={{
-                  marginLeft: "5px",
-                  borderRadius: "50px",
-                  background: "#00FF7F",
-                }}
-              >
-                Indoor Fan OFF
-              </Button>
-            </Card>
-          </div> */}
+        {longitude && latitude ? (
+          <AwsMap longitude={longitude} latitude={latitude} />
+        ) : (
+          ""
+        )}
       </>
     );
   } else if (localStorage.getItem("userType") === "admin") {
