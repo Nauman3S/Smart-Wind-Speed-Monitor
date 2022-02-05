@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "auth": {
-        "frontend5e08329f": {
+        "wsmb818bb8f": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
@@ -8,6 +8,14 @@ export type AmplifyDependentResourcesAttributes = {
             "UserPoolName": "string",
             "AppClientIDWeb": "string",
             "AppClientID": "string"
+        }
+    },
+    "geo": {
+        "wsmmap": {
+            "Name": "string",
+            "Style": "string",
+            "Region": "string",
+            "Arn": "string"
         }
     }
 }

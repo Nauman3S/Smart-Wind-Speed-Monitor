@@ -1,6 +1,7 @@
 node_modules/
 utils/
 middlewares/
+.env
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
