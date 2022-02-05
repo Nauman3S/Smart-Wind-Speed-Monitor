@@ -65,6 +65,8 @@ router.post("/", async (req, res) => {
         humidity: message.humidity,
         windSpeed: message.windSpeed,
         batteryLevel: message.batteryLevel,
+        longitude: message.longitude,
+        latitude: message.latitude,
       });
       mqttMsg.save();
     });
