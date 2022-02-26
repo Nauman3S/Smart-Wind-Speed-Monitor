@@ -168,7 +168,7 @@ Components pin connection details
 ## WebApp <a name = "webapp"></a>
 
 -   Web App is deployed and accessible from the link below
-    -   https://windspeedmonitor-frontend.production.rehanshakir.com/
+    -   http://windspeedmonitor.production.rehanshakir.com/
     -   Email Address: admin@smartsm.com
     -   Password: admin
 
