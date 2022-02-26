@@ -200,6 +200,9 @@ Components pin connection details
 6.  You can also delete the device or change the user settings from the settings page
 
 ![d1](artwork/scr_d6.png)
+
+7.  You can always see the device location on the map just by selecting the MAC Address from the drop-down meny
+![d11](artwork/scrd7.png)
 ## List of Components <a name = "list"></a>
 
 Following components are used to make this project
