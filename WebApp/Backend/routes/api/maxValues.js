@@ -20,5 +20,15 @@ router.put("/", async (req, res) => {
     console.log(err);
   }
 });
-
+router.post("/getValues", async (req, res) => {
+  try {
+    console.log(req.body.macAddress);
+    let maxValues = await maxValueModel.findOne({
+      macAddress: req.body.macAddress,
+    });
+    return res.status(200).send(maxValues);
+  } catch (err) {
+    console.log(err);
+  }
+});
 module.exports = router;
